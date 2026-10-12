@@ -1,0 +1,16 @@
+package com.emmanuel.devicecontroller
+
+import android.content.BroadcastReceiver
+import android.content.Context
+import android.content.Intent
+
+/** If the phone was locked before a reboot, lock it again as soon as it starts. */
+class BootReceiver : BroadcastReceiver() {
+    override fun onReceive(context: Context, intent: Intent) {
+        if (intent.action != Intent.ACTION_BOOT_COMPLETED) return
+        val controller = DeviceController(context)
+        if (controller.isDeviceOwner() && controller.isLocked) {
+            controller.lock(context)
+        }
+    }
+}
